@@ -1,0 +1,43 @@
+langcode: en
+status: true
+dependencies: {  }
+id: person
+migration_tags: null
+label: 'Migrate person from csv source.'
+
+source:
+  plugin: csv
+  track_changes: true
+  path: 'public://migrations/person.csv'
+  delimiter: ','
+  enclosure: '"'
+  header_row_count: 1
+  keys:
+    - id
+
+process:
+  type:
+    plugin: default_value
+    default_value: person
+
+  uid:
+    plugin: default_value
+    default_value: 1
+  
+  field_person_name/given: fname
+  field_person_name/family: lname
+  field_person_role:
+    - 
+      source: role
+      plugin: entity_generate
+      value_key: name
+      bundle_key: vid
+      bundle: roles
+      entity_type: taxonomy_term
+      ignore_case: true
+
+destination:
+  plugin: entity:node
+
+template: null
+migration_dependencies: {  }

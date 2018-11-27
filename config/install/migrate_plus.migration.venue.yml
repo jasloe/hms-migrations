@@ -1,0 +1,43 @@
+langcode: en
+status: true
+dependencies: {  }
+id: venue
+migration_tags: null
+label: 'Migrate venues from csv source.'
+
+source:
+  plugin: csv
+  track_changes: true
+  path: 'public://migrations/venue.csv'
+  delimiter: ','
+  enclosure: '"'
+  header_row_count: 1
+  keys:
+    - id
+
+process:
+  type:
+    plugin: default_value
+    default_value: venue
+
+  uid:
+    plugin: default_value
+    default_value: 1
+  
+  title: title
+
+  field_venue_link/uri: link
+  field_venue_link/title: title
+  field_venue_address/country_code:
+    - 
+      plugin: default_value
+      default_value: 'US'
+  field_venue_address/administrative_area: state
+  field_venue_address/locality: city
+
+
+destination:
+  plugin: entity:node
+
+template: null
+migration_dependencies: {  }

@@ -1,0 +1,101 @@
+langcode: en
+status: true
+dependencies: {  }
+id: artwork
+migration_tags: null
+label: 'Migrate artwork from csv source.'
+
+source:
+  plugin: csv
+  track_changes: true
+  path: 'public://migrations/artwork.csv'
+  delimiter: ','
+  enclosure: '"'
+  header_row_count: 1
+  keys:
+    - id
+
+process:
+  type:
+    plugin: default_value
+    default_value: artwork
+
+  uid:
+    plugin: default_value
+    default_value: 1
+  
+  title: title
+
+  field_artwork_price: price
+  field_artwork_date_range/value: 
+    plugin: format_date
+    source: year
+    from_format: 'Y-m-d'
+    to_format: 'Y-m-d'
+
+  field_artwork_materials: 
+    -
+      plugin: explode
+      source: materials
+      delimiter: ;
+    - 
+      plugin: entity_generate
+      value_key: name
+      bundle_key: vid
+      bundle: materials
+      entity_type: taxonomy_term
+      ignore_case: true
+
+  field_artwork_format: 
+    -
+      plugin: explode
+      source: format
+      delimiter: ;
+    - 
+      plugin: entity_generate
+      value_key: name
+      bundle_key: vid
+      bundle: format
+      entity_type: taxonomy_term
+      ignore_case: true
+
+  # field_artwork_exhibition:
+  #   source: exhibition
+  #   plugin: entity_lookup
+  #   entity_type: node
+  #   bundle: exhibition
+  #   ignore_case: true
+
+  field_artwork_dims/height: height
+  field_artwork_dims/width: width
+  field_artwork_dims/length: length
+
+  # field_artwork_images
+  #   -
+  #     plugin: explode
+  #     source: mid
+  #     delimiter: ;
+  #   - 
+  #     plugin: entity_lookup
+  #     value_key: mid
+  #     bundle: image
+  #     entity_type: media
+  
+  #field_artwork_images/target_id: fid
+
+  # field_artwork_images/target_id:
+  #   -
+  #     plugin: explode
+  #     delimiter: ;
+  #   -
+  #     source: fid
+  #     plugin: entity_lookup
+  #     bundle: artwork
+
+
+  
+destination:
+  plugin: entity:node
+
+template: null
+migration_dependencies: {  }

@@ -1,0 +1,9 @@
+name: 'Migrations'
+type: module
+description: 'Custom migrations for Asphodel website.'
+core: 8.x
+package: 'Custom'
+dependencies:
+  - migrate
+  - migrate_run
+  - migrate_plus

@@ -1,0 +1,33 @@
+<?php
+
+/**
+ * @file
+ * Contains migrations.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function migrations_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the migrations module.
+    case 'help.page.migrations':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Custom migrations for Asphodel website.') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/** 
+ * Implements hook_uninstall(). 
+ */ 
+function migrations_uninstall() { 
+  db_query("DELETE FROM {config} WHERE name LIKE 'migrate_plus.migration.%'"); 
+  db_query("DELETE FROM {config} WHERE name LIKE 'migrate_plus.migration_group.%'"); 
+  drupal_flush_all_caches(); 
+}

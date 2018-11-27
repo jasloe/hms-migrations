@@ -1,0 +1,55 @@
+langcode: en
+status: true
+dependencies: {  }
+id: exhibition
+migration_tags: null
+label: 'Migrate exhibition from csv source.'
+
+source:
+  plugin: csv
+  track_changes: true
+  path: 'public://migrations/exhibition.csv'
+  delimiter: ','
+  enclosure: '"'
+  header_row_count: 1
+  keys:
+    - id
+
+process:
+  type:
+    plugin: default_value
+    default_value: exhibition
+
+  uid:
+    plugin: default_value
+    default_value: 1
+  
+  title: title
+
+  field_exhibition_venue: 
+    source: venue
+    plugin: entity_lookup
+    value_key: title
+    bundle: venue
+    entity_type: node
+    ignore_case: true
+
+  field_exhibition_curator: 
+    source: curator
+    plugin: entity_lookup
+    value_key: title
+    bundle: person
+    entity_type: node
+    ignore_case: true  
+
+  field_exhibition_date_range/value: 
+    plugin: format_date
+    source: year
+    from_format: 'Y-m-d'
+    to_format: 'Y-m-d'   
+  
+destination:
+  plugin: entity:node
+
+template: null
+migration_dependencies: {  }
